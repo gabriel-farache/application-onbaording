@@ -47,8 +47,6 @@ states:
           refName: jiraCreateIssue
           arguments:
             fields:
-              assignee:
-                name: .jiraInfo.assignee
               description: '"Please create a new Github Repository: https://github.com/parodos-dev/application-onboarding \n Go to https://github.com/new"'
               issuetype:
                 name: Task
@@ -57,8 +55,6 @@ states:
                 - '"workflowId=" + $WORKFLOW.instanceId'
               project:
                 key: .jiraInfo.projectKey
-              reporter:
-                name: .jiraInfo.reporter
               priority:
                 name: High
               summary: New Repository for Application onboarding project on Backstage

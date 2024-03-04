@@ -8,17 +8,8 @@
       "title": "Project Key",
       "description": "JIRA project key",
       "type": "string"
-    },
-    "reporter": {
-      "title": "Reporter",
-      "description": "JIRA user name",
-      "type": "string"
-    },
-    "assignee": {
-      "title": "Assignee",
-      "description": "JIRA user name",
-      "type": "string"
     }
+    
   },
-  "required": ["assignee", "projectKey", "reporter"]
+  "required": ["projectKey"]
 }
