@@ -23,6 +23,8 @@ events:
 errors:
   - name: Error
     code: java.lang.RuntimeException
+  - name: timeoutError
+    code: TimedOut
 start: Notify Backstage
 states:
   - name: "Notify Backstage"
@@ -92,7 +94,9 @@ states:
       toStateData: .jiraResolveIssueResult
     timeouts:
       eventTimeout: PT60S
-    compensatedBy: Close issue on JIRA due to Timeout
+    onErrors:
+    - errorRef: timeoutError
+      transition: Close issue on JIRA due to Timeout
     transition: Check repository created
   - name: Check repository created
     type: switch
@@ -100,12 +104,8 @@ states:
       - condition: .jiraResolveIssueResult != null
         transition: PrintJiraIssueSolved
         name: Created
-      - condition: .jiraResolveIssueResult == null
-        transition: Wait for event from JIRA
-        name: Not created
     defaultCondition:
       transition:
-        compensate: true
         nextState: Wait for event from JIRA
   - name: PrintJiraIssueSolved
     type: parallel
@@ -159,11 +159,9 @@ states:
               comment:
                 - add:
                     body: Issue closed due to time out on Backstage workflow
-    usedForCompensation: true
     transition: "Notify Backstage: JIRA ticket closed"
   - name: "Notify Backstage: JIRA ticket closed"
     type: operation
-    usedForCompensation: true
     actions:
       - name: "Create notification: JIRA ticket closed"
         functionRef:
